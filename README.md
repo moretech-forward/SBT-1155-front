@@ -8,25 +8,26 @@ Unlike traditional token standards, SBT1155 implements a unique mechanism where 
 
 ## Features
 
-Soulbinding: Each token is bound to a specific address upon creation, ensuring exclusive ownership and transfer rights.
-Flexible Properties: SBT1155 tokens can be minted with customizable properties, allowing for diverse use cases and applications.
-Interoperability: Compatible with existing token standards, enabling seamless integration with decentralized applications and platforms.
-Enhanced Security: Immutable ownership and transfer rules provide a high level of security and trust in token transactions.
+- **Soulbinding**: Each token is bound to a specific address upon creation, ensuring exclusive ownership and transfer rights.
+- **Flexible Properties**: SBT1155 tokens can be minted with customizable properties, allowing for diverse use cases and applications.
+- **Interoperability**: Compatible with existing token standards, enabling seamless integration with decentralized applications and platforms.
+- **Enhanced Security**: Immutable ownership and transfer rules provide a high level of security and trust in token transactions.
 
 ## Demo
 
 Explore the capabilities of SBT1155 through our live demos:
 
-User Interface - Experience the user-friendly interface.
-Documentation - Access detailed documentation and guides.
-Feedback
-We value your input! Please share your reviews and suggestions on our Google Docs.
+1. [User Interface](https://moretech-forward.github.io/SBT-721-front/erc721/index.html) - Experience the user-friendly interface.
+2. [Documentation](https://moretech-forward.github.io/SBT-721-front/erc721-admin/index.html) - Access detailed documentation and guides.
+
+# Feedback
+We value your input! Please share your reviews and suggestions on our [Google Docs](https://docs.google.com/document/d/1ATMq-_hItmTqOGQeE8p9MncHTp0f7tinihTfzGEDEkE/edit?usp=sharing).
 
 ## Tools Used
 
-Tailwind CSS: Rapidly build responsive user interfaces with utility-first CSS.
-DaisyUI: Enhance Tailwind CSS with a collection of beautiful components and presets.
-Toastify JS: Display customizable toast notifications in your JavaScript applications.
-Ethers JS: Interact with Ethereum-based smart contracts and wallets seamlessly.
+- **Tailwind CSS**: Rapidly build responsive user interfaces with utility-first CSS.
+- **DaisyUI**: Enhance Tailwind CSS with a collection of beautiful components and presets.
+- **Toastify JS**: Display customizable toast notifications in your JavaScript applications.
+- **Ethers JS**: Interact with Ethereum-based smart contracts and wallets seamlessly.
 
 Experience the future of tokenization with SBT1155! 🚀
