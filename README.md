@@ -18,7 +18,7 @@ Unlike traditional token standards, SBT1155 implements a unique mechanism where 
 Explore the capabilities of SBT1155 through our live demos:
 
 1. [User Interface](https://moretech-forward.github.io/SBT-1155-front/erc1155/index.html) - Experience the user-friendly interface.
-2. [Documentation](https://moretech-forward.github.io/SBT-1155-front/erc1155-admin/index.html) - Access detailed documentation and guides.
+2. [Administration Panel](https://moretech-forward.github.io/SBT-1155-front/erc1155-admin/index.html) -  Access administrative controls.
 
 # Feedback
 We value your input! Please share your reviews and suggestions on our [Google Docs](https://docs.google.com/document/d/1ATMq-_hItmTqOGQeE8p9MncHTp0f7tinihTfzGEDEkE/edit?usp=sharing).
