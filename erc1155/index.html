@@ -96,23 +96,54 @@
     };
 
     let nfts = [];
+    let batch_nfts = [];
     const getNfts = async () => {
       const get_nfts = await contract.queryFilter("TransferSingle");
       get_nfts.forEach((nft) => {
         nfts.push(nft.args);
       });
 
-      // const get_nfts2 = await contract.queryFilter("TransferBatch");
+      const batch_events = await contract.queryFilter("TransferBatch");
 
-      // get_nfts2.forEach((nft) => {
-      //   nfts.push(nft.args);
-      // });
+      batch_events.forEach((nft) => {
+        batch_nfts.push(nft.args);
+      });
     };
 
     const renderNfts = async () => {
       const section = document.getElementById("nft-cards");
       section.innerHTML = "";
-      console.log(nfts.length);
+      // console.log(nfts.length);
+
+      const batch_nftMap = new Map();
+
+      for (let item in batch_nfts) {
+        const nft = batch_nfts[item];
+        const to = nft[2];
+        const ids = nft[3];
+        const amounts = nft[4];
+
+        if (to !== "0x0000000000000000000000000000000000000000") {
+          for (let index = 0; index < ids.length; index++) {
+            const id = ids[index];
+            const key = `${id}-${to}`;
+            if (!batch_nftMap.has(key)) {
+              const balance = (await contract.balanceOf(to, id)).toString();
+              if (balance !== "0") {
+                // Проверка баланса перед добавлением
+                batch_nftMap.set(key, {
+                  id: id,
+                  to: to,
+                  balance: balance,
+                });
+              }
+            }
+          }
+        }
+      }
+
+      // Вывод уникальных NFT
+      const batchResults = Array.from(batch_nftMap.values());
 
       for (let item in nfts) {
         const nft = nfts[item];
@@ -133,19 +164,45 @@
           nft.to !== "0x0000000000000000000000000000000000000000"
         ) {
           const balance = (await contract.balanceOf(nft.to, nft.id)).toString();
-          nftMap.set(key, {
-            id: nft.id,
-            to: nft.to,
-            balance: balance,
-          });
+
+          if (balance !== "0") {
+            // Проверка баланса перед добавлением
+            nftMap.set(key, {
+              id: nft.id,
+              to: nft.to,
+              balance: balance,
+            });
+          }
         }
       }
 
       // Преобразуем Map обратно в массив для удобства
-      const results = Array.from(nftMap.values());
+      const nftResults = Array.from(nftMap.values());
 
       // Вывод результатов
-      console.log(results);
+      //console.log(results);
+      // Создание нового Map для уникализации данных
+      const uniqueMap = new Map();
+
+      // Функция для добавления элементов в Map для уникализации
+      function addUniqueItems(items) {
+        items.forEach((item) => {
+          const key = `${item.id}-${item.to}-${item.balance}`; // Создание уникального ключа, включая balance
+          if (!uniqueMap.has(key)) {
+            uniqueMap.set(key, item);
+          }
+        });
+      }
+
+      // Добавление элементов из обоих массивов
+      addUniqueItems(batchResults);
+      addUniqueItems(nftResults);
+
+      // Получение уникального массива из Map
+      const results = Array.from(uniqueMap.values()).sort((a, b) => {
+        return a.id - b.id; // Сортировка по возрастанию id
+      });
+      //const results = [...batchResults, ...nftResults];
 
       for (let item in results) {
         const nft = results[item];
