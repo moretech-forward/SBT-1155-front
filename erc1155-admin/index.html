@@ -86,30 +86,20 @@
     </div>
   </div>
 
-  <section
+  <div
+    class="bg-base-100 w-full flex flex-col items-center gap-4 pt-36"
     id="loader"
-    class="bg-base-100 flex flex-col items-center pt-20"
-    style="height: 1000px"
+    style="min-height: 800px"
+    data-theme="dark"
   >
-    <svg
-      class="animate-spin fill-white"
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      style="fill: rgba(255, 255, 255, 1)"
-    >
-      <path
-        d="M12 22c5.421 0 10-4.579 10-10h-2c0 4.337-3.663 8-8 8s-8-3.663-8-8c0-4.336 3.663-8 8-8V2C6.579 2 2 6.58 2 12c0 5.421 4.579 10 10 10z"
-      ></path>
-    </svg>
-    <p class="mt-4 text-xl text-white">Get contract info...</p>
-  </section>
+    <span class="loading loading-ring loading-lg text-white"></span>
+    <p class="text-white text-3xl" id="init-text"></p>
+  </div>
 
   <section
     id="content"
     data-theme="dark"
-    class="pt-20 items-center flex-col gap-10 bg-base-100 hidden"
+    class="pt-20 items-center flex-col gap-10 bg-base-100 flex hidden"
     style="height: 1000px"
   >
     <h1 class="text-center text-3xl font-extrabold text-white">
@@ -358,14 +348,22 @@
     });
   </script>
 
+  <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+  <!--loading animation-->
   <script>
     const loader = document.getElementById("loader");
     const content = document.getElementById("content");
 
+    var typed = new Typed("#init-text", {
+      strings: ["Initializing app...", "Get contract info..."],
+      typeSpeed: 30,
+      backSpeed: 0,
+    });
+
     setTimeout(() => {
-      loader.classList.add("hidden");
       loader.classList.remove("flex");
-      content.classList.add("flex");
+      loader.classList.add("hidden");
+
       content.classList.remove("hidden");
     }, 3000);
   </script>
@@ -403,7 +401,7 @@
     const getAddress = async () => {
       setTimeout(() => {
         contractAddress = document.getElementById("future_address").innerHTML;
-      }, 3000);
+      }, 2000);
     };
 
     getAddress();
@@ -414,28 +412,21 @@
 
     const initApp = async () => {
       // forward
-      // provider = new ethers.BrowserProvider(this.parent.ethereum);
-      // signer = await provider.getSigner();
+      provider = new ethers.BrowserProvider(this.parent.ethereum);
+      signer = await provider.getSigner();
 
-      // connectContract = new ethers.Contract(contractAddress, abi, signer);
-      // console.log("Account:", await signer.getAddress());
+      connectContract = new ethers.Contract(contractAddress, abi, signer);
+      console.log("Account:", await signer.getAddress());
       // forward
 
       // test chain
-      const privateKey =
-        "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-      const provider = ethers.getDefaultProvider("http://localhost:8545/");
-      const contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
-      const walletWithProvider = new ethers.Wallet(privateKey, provider);
-      const contract = new ethers.Contract(contractAddress, abi, provider);
-      connectContract = contract.connect(walletWithProvider);
-      console.log(
-        "Account:",
-        await connectContract.balanceOf(
-          "0x4eb6EBcfA62792A01E5005c453F39D63493a79B8",
-          1
-        )
-      );
+      // const privateKey =
+      //   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+      // const provider = ethers.getDefaultProvider("http://localhost:8545/");
+      // const contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
+      // const walletWithProvider = new ethers.Wallet(privateKey, provider);
+      // const contract = new ethers.Contract(contractAddress, abi, provider);
+      // connectContract = contract.connect(walletWithProvider);
       // test chain
     };
     setTimeout(() => {
