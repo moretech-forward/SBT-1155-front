@@ -113,11 +113,45 @@
       const section = document.getElementById("nft-cards");
       section.innerHTML = "";
       console.log(nfts.length);
+
       for (let item in nfts) {
         const nft = nfts[item];
-        const ownerAddress = nft[2];
+        const to = nft[2];
         const id = nft[3];
         const amount = nft[4];
+
+        const balance = (await contract.balanceOf(to, id)).toString();
+      }
+
+      const nftMap = new Map();
+
+      // Перебираем начальный массив, фильтруя повторения
+      for (const nft of nfts) {
+        const key = `${nft.id}-${nft.to}`;
+        if (
+          !nftMap.has(key) &&
+          nft.to !== "0x0000000000000000000000000000000000000000"
+        ) {
+          const balance = (await contract.balanceOf(nft.to, nft.id)).toString();
+          nftMap.set(key, {
+            id: nft.id,
+            to: nft.to,
+            balance: balance,
+          });
+        }
+      }
+
+      // Преобразуем Map обратно в массив для удобства
+      const results = Array.from(nftMap.values());
+
+      // Вывод результатов
+      console.log(results);
+
+      for (let item in results) {
+        const nft = results[item];
+        const ownerAddress = nft.to;
+        const id = nft.id;
+        const amount = nft.balance;
 
         try {
           const link = await contract.uri(id);
