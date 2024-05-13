@@ -105,6 +105,43 @@
     <h1 class="text-center text-3xl font-extrabold text-white">
       Soulbound Token (ERC1155) - Admin
     </h1>
+    <div class="px-10 pt-10">
+      <button class="btn" onclick="my_modal_1.showModal()">Read info</button>
+      <dialog id="my_modal_1" class="modal">
+        <div class="modal-box">
+          <b> Information about admin panel functions! </b>
+          <br />
+          <p class="py-4">
+            <b>Mint</b> - create new SBT, enter the wallet address, token
+            identifier and amount of tokens
+            <br />
+            <b>Batch Mint</b> - mass creation of several SBTs at one time.
+            Administrator enters data in the form: wallet address, first token
+            identifier in the first line, second identifier in the second line,
+            and so on, and so on for amounts.
+            <br />
+            <b>Set URI</b> - setting or changing the URI for the token metadata.
+            <br />
+            <b>Burn</b> - deleting existing NFTs. The administrator enters the
+            wallet address, token ID, and the amount of tokens to be burned
+            <br />
+            <b>Batch Burn</b> - mass deletion of several SBTs at one time.
+            Administrator enters data in the form: wallet address, first token
+            identifier in the first line, second identifier in the second line,
+            and so on, and so on for amounts.
+            <br />
+            <b>Transfer ownership</b> - transfer ownership of SBT collection or
+            renounce ownership.
+          </p>
+          <div class="modal-action">
+            <form method="dialog">
+              <!-- if there is a button in form, it will close the modal -->
+              <button class="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+    </div>
     <div role="tablist" class="tabs tabs-boxed">
       <a
         role="tab"

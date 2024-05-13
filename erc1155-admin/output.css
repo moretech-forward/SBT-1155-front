@@ -8491,10 +8491,6 @@ html:has(.drawer-open.drawer-open) {
   margin-top: 0.5rem;
 }
 
-.mt-4 {
-  margin-top: 1rem;
-}
-
 .box-border {
   box-sizing: border-box;
 }
@@ -8684,16 +8680,6 @@ html:has(.drawer-open.drawer-open) {
 
 .transform-none {
   transform: none;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
 }
 
 .touch-auto {
@@ -9160,6 +9146,10 @@ html:has(.drawer-open.drawer-open) {
 
 .gap-2 {
   gap: 0.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
 }
 
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
@@ -9703,10 +9693,6 @@ html:has(.drawer-open.drawer-open) {
   background-origin: content-box;
 }
 
-.fill-white {
-  fill: #fff;
-}
-
 .object-contain {
   -o-object-fit: contain;
      object-fit: contain;
@@ -9736,8 +9722,26 @@ html:has(.drawer-open.drawer-open) {
   padding: 0.5rem;
 }
 
+.px-10 {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.pt-10 {
+  padding-top: 2.5rem;
+}
+
 .pt-20 {
   padding-top: 5rem;
+}
+
+.pt-36 {
+  padding-top: 9rem;
 }
 
 .text-left {
@@ -9799,11 +9803,6 @@ html:has(.drawer-open.drawer-open) {
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
-}
-
-.text-xl {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
 }
 
 .font-bold {
