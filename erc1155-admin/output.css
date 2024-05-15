@@ -9148,10 +9148,6 @@ html:has(.drawer-open.drawer-open) {
   gap: 0.5rem;
 }
 
-.gap-4 {
-  gap: 1rem;
-}
-
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(0.5rem * var(--tw-space-x-reverse));
@@ -9738,10 +9734,6 @@ html:has(.drawer-open.drawer-open) {
 
 .pt-20 {
   padding-top: 5rem;
-}
-
-.pt-36 {
-  padding-top: 9rem;
 }
 
 .text-left {
