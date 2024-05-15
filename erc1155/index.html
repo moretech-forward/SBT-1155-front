@@ -87,16 +87,6 @@
     </div>
   </div>
 
-  <div
-    class="bg-base-100 w-full flex flex-col items-center gap-4 pt-36"
-    id="loader"
-    style="min-height: 800px"
-    data-theme="dark"
-  >
-    <span class="loading loading-ring loading-lg text-white"></span>
-    <p class="text-white text-3xl" id="init-text"></p>
-  </div>
-
   <section
     data-theme="dark"
     id="content"
@@ -130,25 +120,6 @@
     type="text/javascript"
   ></script>
   <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-
-  <!--loading animation-->
-  <script>
-    const loader = document.getElementById("loader");
-    const content = document.getElementById("content");
-
-    var typed = new Typed("#init-text", {
-      strings: ["Initializing app...", "Get contract info..."],
-      typeSpeed: 30,
-      backSpeed: 0,
-    });
-
-    setTimeout(() => {
-      loader.classList.remove("flex");
-      loader.classList.add("hidden");
-
-      content.classList.remove("hidden");
-    }, 3000);
-  </script>
 
   <script>
     const abi = [

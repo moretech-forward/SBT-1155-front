@@ -1,444 +1,416 @@
 <body id="itrf">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="./build.css" rel="stylesheet" />
-  <link
-    href="https://cdn.jsdelivr.net/npm/daisyui@4.10.3/dist/full.min.css"
-    rel="stylesheet"
-    type="text/css"
-  />
-  <link
-    rel="stylesheet"
-    type="text/css"
-    href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
-  />
+<meta charset="UTF-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="./build.css" rel="stylesheet"/>
+<link
+        href="https://cdn.jsdelivr.net/npm/daisyui@4.10.3/dist/full.min.css"
+        rel="stylesheet"
+        type="text/css"
+/>
+<link
+        href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+        rel="stylesheet"
+        type="text/css"
+/>
 
-  <p id="future_address" class="hidden invisible"></p>
-  <div class="p-2 hidden invisible">
+<p class="hidden invisible" id="future_address"></p>
+<div class="p-2 hidden invisible">
     <div class="accordion">
-      <div class="accordion-item">
-        <section class="m-auto w-100">
-          <h3 id="headingOne" class="accordion-header text-center">
-            <button
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapse_myAddr"
-              aria-expanded="true"
-              aria-controls="collapse_myAddr"
-              class="accordion-button collapsed"
-            >
-              myAddr
-            </button>
-          </h3>
-          <div
-            id="collapse_myAddr"
-            aria-labelledby="headingOne"
-            data-bs-parent="#accordionExample"
-            class="accordion-collapse collapse"
-          >
-            <div class="accordion-body">
-              <form id="form-myAddr" class="d-flex flex-column gap-2 p-2">
-                <div>
-                  <button
-                    id="btn"
-                    type="button"
-                    data-form-name="myAddr"
-                    class="btn btn-primary mt-2"
-                  >
-                    Read
-                  </button>
-                </div>
-                <div>
-                  <p>Response:</p>
-                  <div>
-                    :
-                    <span
-                      id="form-output-myAddr-0"
-                      data-form-name="myAddr"
-                      data-field-type="address"
-                      >address</span
+        <div class="accordion-item">
+            <section class="m-auto w-100">
+                <h3 class="accordion-header text-center" id="headingOne">
+                    <button
+                            aria-controls="collapse_myAddr"
+                            aria-expanded="true"
+                            class="accordion-button collapsed"
+                            data-bs-target="#collapse_myAddr"
+                            data-bs-toggle="collapse"
+                            type="button"
                     >
-                    <br />
-                  </div>
+                        myAddr
+                    </button>
+                </h3>
+                <div
+                        aria-labelledby="headingOne"
+                        class="accordion-collapse collapse"
+                        data-bs-parent="#accordionExample"
+                        id="collapse_myAddr"
+                >
+                    <div class="accordion-body">
+                        <form class="d-flex flex-column gap-2 p-2" id="form-myAddr">
+                            <div>
+                                <button
+                                        class="btn btn-primary mt-2"
+                                        data-form-name="myAddr"
+                                        id="btn"
+                                        type="button"
+                                >
+                                    Read
+                                </button>
+                            </div>
+                            <div>
+                                <p>Response:</p>
+                                <div>
+                                    :
+                                    <span
+                                            data-field-type="address"
+                                            data-form-name="myAddr"
+                                            id="form-output-myAddr-0"
+                                    >address</span
+                                    >
+                                    <br/>
+                                </div>
+                            </div>
+
+                            <script>
+                                setTimeout(() => {
+                                    const element = document.getElementById("btn");
+                                    if (element) {
+                                        element.click();
+
+                                        setTimeout(() => {
+                                            const future_address =
+                                                document.getElementById("future_address");
+                                            future_address.innerHTML = document.getElementById(
+                                                "form-output-myAddr-0"
+                                            ).innerHTML;
+                                        }, 1000);
+                                    }
+                                }, 1000);
+                            </script>
+                        </form>
+                    </div>
                 </div>
-
-                <script>
-                  setTimeout(() => {
-                    const element = document.getElementById("btn");
-                    if (element) {
-                      element.click();
-
-                      setTimeout(() => {
-                        const future_address =
-                          document.getElementById("future_address");
-                        future_address.innerHTML = document.getElementById(
-                          "form-output-myAddr-0"
-                        ).innerHTML;
-                      }, 1000);
-                    }
-                  }, 1000);
-                </script>
-              </form>
-            </div>
-          </div>
-        </section>
-      </div>
+            </section>
+        </div>
     </div>
-  </div>
+</div>
 
-  <div
-    class="bg-base-100 w-full flex flex-col items-center gap-4 pt-36"
-    id="loader"
-    style="min-height: 800px"
-    data-theme="dark"
-  >
-    <span class="loading loading-ring loading-lg text-white"></span>
-    <p class="text-white text-3xl" id="init-text"></p>
-  </div>
-
-  <section
-    id="content"
-    data-theme="dark"
-    class="pt-20 items-center flex-col gap-10 bg-base-100 flex hidden"
-    style="height: 1000px"
-  >
+<section
+        class="pt-20 items-center flex-col gap-10 bg-base-100 flex hidden"
+        data-theme="dark"
+        id="content"
+        style="height: 1000px"
+>
     <h1 class="text-center text-3xl font-extrabold text-white">
-      Soulbound Token (ERC1155) - Admin
+        Soulbound Token (ERC1155) - Admin
     </h1>
     <div class="px-10 pt-10">
-      <button class="btn" onclick="my_modal_1.showModal()">Read info</button>
-      <dialog id="my_modal_1" class="modal">
-        <div class="modal-box">
-          <b> Information about admin panel functions! </b>
-          <br />
-          <p class="py-4">
-            <b>Mint</b> - create new SBT, enter the wallet address, token
-            identifier and amount of tokens
-            <br />
-            <b>Batch Mint</b> - mass creation of several SBTs at one time.
-            Administrator enters data in the form: wallet address, first token
-            identifier in the first line, second identifier in the second line,
-            and so on, and so on for amounts.
-            <br />
-            <b>Set URI</b> - setting or changing the URI for the token metadata.
-            <br />
-            <b>Burn</b> - deleting existing NFTs. The administrator enters the
-            wallet address, token ID, and the amount of tokens to be burned
-            <br />
-            <b>Batch Burn</b> - mass deletion of several SBTs at one time.
-            Administrator enters data in the form: wallet address, first token
-            identifier in the first line, second identifier in the second line,
-            and so on, and so on for amounts.
-            <br />
-            <b>Transfer ownership</b> - transfer ownership of SBT collection or
-            renounce ownership.
-          </p>
-          <div class="modal-action">
-            <form method="dialog">
-              <!-- if there is a button in form, it will close the modal -->
-              <button class="btn">Close</button>
-            </form>
-          </div>
-        </div>
-      </dialog>
+        <button class="btn" onclick="my_modal_1.showModal()">Read info</button>
+        <dialog class="modal" id="my_modal_1">
+            <div class="modal-box">
+                <b> Information about admin panel functions! </b>
+                <br/>
+                <p class="py-4">
+                    <b>Mint</b> - create new SBT, enter the wallet address, token
+                    identifier and amount of tokens
+                    <br/>
+                    <b>Batch Mint</b> - mass creation of several SBTs at one time.
+                    Administrator enters data in the form: wallet address, first token
+                    identifier in the first line, second identifier in the second line,
+                    and so on, and so on for amounts.
+                    <br/>
+                    <b>Set URI</b> - setting or changing the URI for the token metadata.
+                    <br/>
+                    <b>Burn</b> - deleting existing NFTs. The administrator enters the
+                    wallet address, token ID, and the amount of tokens to be burned
+                    <br/>
+                    <b>Batch Burn</b> - mass deletion of several SBTs at one time.
+                    Administrator enters data in the form: wallet address, first token
+                    identifier in the first line, second identifier in the second line,
+                    and so on, and so on for amounts.
+                    <br/>
+                    <b>Transfer ownership</b> - transfer ownership of SBT collection or
+                    renounce ownership.
+                </p>
+                <div class="modal-action">
+                    <form method="dialog">
+                        <!-- if there is a button in form, it will close the modal -->
+                        <button class="btn">Close</button>
+                    </form>
+                </div>
+            </div>
+        </dialog>
     </div>
-    <div role="tablist" class="tabs tabs-boxed">
-      <a
-        role="tab"
-        id="mint-tab"
-        class="tab tab-active transition-all duration-200"
-      >
-        Mint
-      </a>
-      <a role="tab" id="batch-tab" class="tab transition-all duration-200">
-        Batch Mint
-      </a>
-      <a role="tab" id="batch-tab" class="tab transition-all duration-200">
-        Set URI
-      </a>
-      <a role="tab" id="burn-tab" class="tab transition-all duration-200">
-        Burn
-      </a>
-      <a role="tab" id="burn-tab" class="tab transition-all duration-200">
-        Batch Burn
-      </a>
-      <a role="tab" id="transfer-tab" class="tab transition-all duration-200">
-        Transfer ownership
-      </a>
-    </div>
-
-    <div id="tab-1" class="custom-card card w-96 bg-base-100 shadow-xl">
-      <form id="mint_form" class="card-body flex flex-col space-y-4">
-        <div class="flex flex-col gap-2">
-          <label for="mint_address">Wallet address</label>
-          <input
-            type="text"
-            id="mint_address"
-            name="mint_address"
-            placeholder="Enter address"
-            class="input input-bordered w-full max-w-xs"
-            required
-          />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="mint_id">Token ID</label>
-          <input
-            type="number"
-            id="mint_id"
-            name="mint_id"
-            placeholder="Enter token id"
-            class="input input-bordered w-full max-w-xs"
-            required
-          />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="mint_amount">Amount</label>
-          <input
-            type="number"
-            id="mint_amount"
-            name="mint_amount"
-            placeholder="Enter amount"
-            class="input input-bordered w-full max-w-xs"
-            required
-          />
-        </div>
-        <button class="btn btn-primary">Mint</button>
-      </form>
+    <div class="tabs tabs-boxed" role="tablist">
+        <a
+                class="tab tab-active transition-all duration-200"
+                id="mint-tab"
+                role="tab"
+        >
+            Mint
+        </a>
+        <a class="tab transition-all duration-200" id="batch-mint-tab" role="tab">
+            Batch Mint
+        </a>
+        <a class="tab transition-all duration-200" id="set-tab" role="tab">
+            Set URI
+        </a>
+        <a class="tab transition-all duration-200" id="burn-tab" role="tab">
+            Burn
+        </a>
+        <a class="tab transition-all duration-200" id="burn-batch-tab" role="tab">
+            Batch Burn
+        </a>
+        <a class="tab transition-all duration-200" id="transfer-tab" role="tab">
+            Transfer ownership
+        </a>
     </div>
 
-    <div id="tab-2" class="custom-card w-96 bg-base-100 shadow-xl hidden">
-      <form id="batch_mint_form" class="card-body flex flex-col space-y-4">
-        <div class="flex flex-col gap-2">
-          <div class="flex flex-col gap-2">
-            <label for="batch_mint_address">Wallet address</label>
-            <input
-              type="text"
-              id="batch_mint_address"
-              name="batch_mint_address"
-              placeholder="Enter address"
-              class="input input-bordered w-full max-w-xs"
-              required
-            />
-          </div>
-          <label for="batch_mint_ids">Token IDs</label>
-          <textarea
-            id="batch_mint_ids"
-            name="batch_mint_ids"
-            class="textarea textarea-bordered min-h-36 max-h-96"
-            placeholder="Enter IDs"
-          ></textarea>
-          <label for="batch_mint_amounts">Token amounts</label>
-          <textarea
-            id="batch_mint_amounts"
-            name="batch_mint_amounts"
-            class="textarea textarea-bordered min-h-36 max-h-96"
-            placeholder="Enter amounts"
-          ></textarea>
-        </div>
-        <button class="btn btn-primary">Batch Mint</button>
-      </form>
+    <div class="custom-card card w-96 bg-base-100 shadow-xl" id="tab-1">
+        <form class="card-body flex flex-col space-y-4" id="mint_form">
+            <div class="flex flex-col gap-2">
+                <label for="mint_address">Wallet address</label>
+                <input
+                        class="input input-bordered w-full max-w-xs"
+                        id="mint_address"
+                        name="mint_address"
+                        placeholder="Enter address"
+                        required
+                        type="text"
+                />
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="mint_id">Token ID</label>
+                <input
+                        class="input input-bordered w-full max-w-xs"
+                        id="mint_id"
+                        name="mint_id"
+                        placeholder="Enter token id"
+                        required
+                        type="number"
+                />
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="mint_amount">Amount</label>
+                <input
+                        class="input input-bordered w-full max-w-xs"
+                        id="mint_amount"
+                        name="mint_amount"
+                        placeholder="Enter amount"
+                        required
+                        type="number"
+                />
+            </div>
+            <button class="btn btn-primary">Mint</button>
+        </form>
     </div>
 
-    <div id="tab-3" class="custom-card w-96 bg-base-100 shadow-xl hidden">
-      <form id="set_uri_form" class="card-body flex flex-col space-y-4">
-        <div class="flex flex-col gap-2">
-          <label for="set_id">Token ID</label>
-          <input
-            type="number"
-            id="set_id"
-            name="set_id"
-            placeholder="Enter id"
-            class="input input-bordered w-full max-w-xs"
-            required
-          />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="set_uri">Metadata link</label>
-          <input
-            type="text"
-            id="set_uri"
-            name="set_uri"
-            placeholder="Enter link"
-            class="input input-bordered w-full max-w-xs"
-            required
-          />
-        </div>
-        <button class="btn btn-primary">Set URI</button>
-      </form>
+    <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-2">
+        <form class="card-body flex flex-col space-y-4" id="batch_mint_form">
+            <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-2">
+                    <label for="batch_mint_address">Wallet address</label>
+                    <input
+                            class="input input-bordered w-full max-w-xs"
+                            id="batch_mint_address"
+                            name="batch_mint_address"
+                            placeholder="Enter address"
+                            required
+                            type="text"
+                    />
+                </div>
+                <label for="batch_mint_ids">Token IDs</label>
+                <textarea
+                        class="textarea textarea-bordered min-h-36 max-h-96"
+                        id="batch_mint_ids"
+                        name="batch_mint_ids"
+                        placeholder="Enter IDs"
+                ></textarea>
+                <label for="batch_mint_amounts">Token amounts</label>
+                <textarea
+                        class="textarea textarea-bordered min-h-36 max-h-96"
+                        id="batch_mint_amounts"
+                        name="batch_mint_amounts"
+                        placeholder="Enter amounts"
+                ></textarea>
+            </div>
+            <button class="btn btn-primary">Batch Mint</button>
+        </form>
     </div>
 
-    <div id="tab-4" class="custom-card w-96 bg-base-100 shadow-xl hidden">
-      <form id="burn_form" class="card-body flex flex-col space-y-4">
-        <div class="flex flex-col gap-2">
-          <label for="burn_address">Wallet address</label>
-          <input
-            type="text"
-            id="burn_address"
-            name="burn_address"
-            placeholder="Enter address"
-            class="input input-bordered w-full max-w-xs"
-            required
-          />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="burn_id">Token ID</label>
-          <input
-            type="number"
-            id="burn_id"
-            name="burn_id"
-            placeholder="Enter token id to burn"
-            class="input input-bordered w-full max-w-xs"
-            required
-          />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="burn_amount">Amount</label>
-          <input
-            type="number"
-            id="burn_amount"
-            name="burn_amount"
-            placeholder="Enter amount to burn"
-            class="input input-bordered w-full max-w-xs"
-            required
-          />
-        </div>
-        <button class="btn btn-primary">Burn</button>
-      </form>
+    <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-3">
+        <form class="card-body flex flex-col space-y-4" id="set_uri_form">
+            <div class="flex flex-col gap-2">
+                <label for="set_id">Token ID</label>
+                <input
+                        class="input input-bordered w-full max-w-xs"
+                        id="set_id"
+                        name="set_id"
+                        placeholder="Enter id"
+                        required
+                        type="number"
+                />
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="set_uri">Metadata link</label>
+                <input
+                        class="input input-bordered w-full max-w-xs"
+                        id="set_uri"
+                        name="set_uri"
+                        placeholder="Enter link"
+                        required
+                        type="text"
+                />
+            </div>
+            <button class="btn btn-primary">Set URI</button>
+        </form>
     </div>
 
-    <div id="tab-5" class="custom-card w-96 bg-base-100 shadow-xl hidden">
-      <form id="batch_burn_form" class="card-body flex flex-col space-y-4">
-        <div class="flex flex-col gap-2">
-          <div class="flex flex-col gap-2">
-            <label for="batch_burn_address">Wallet address</label>
-            <input
-              type="text"
-              id="batch_burn_address"
-              name="batch_burn_address"
-              placeholder="Enter address"
-              class="input input-bordered w-full max-w-xs"
-              required
-            />
-          </div>
-          <label for="batch_burn_ids">Token IDs</label>
-          <textarea
-            id="batch_burn_ids"
-            name="batch_burn_ids"
-            class="textarea textarea-bordered min-h-36 max-h-96"
-            placeholder="Enter IDs"
-          ></textarea>
-          <label for="batch_burn_amounts">Token amounts</label>
-          <textarea
-            id="batch_burn_amounts"
-            name="batch_burn_amounts"
-            class="textarea textarea-bordered min-h-36 max-h-96"
-            placeholder="Enter amounts"
-          ></textarea>
-        </div>
-        <button class="btn btn-primary">Batch Burn</button>
-      </form>
+    <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-4">
+        <form class="card-body flex flex-col space-y-4" id="burn_form">
+            <div class="flex flex-col gap-2">
+                <label for="burn_address">Wallet address</label>
+                <input
+                        class="input input-bordered w-full max-w-xs"
+                        id="burn_address"
+                        name="burn_address"
+                        placeholder="Enter address"
+                        required
+                        type="text"
+                />
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="burn_id">Token ID</label>
+                <input
+                        class="input input-bordered w-full max-w-xs"
+                        id="burn_id"
+                        name="burn_id"
+                        placeholder="Enter token id to burn"
+                        required
+                        type="number"
+                />
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="burn_amount">Amount</label>
+                <input
+                        class="input input-bordered w-full max-w-xs"
+                        id="burn_amount"
+                        name="burn_amount"
+                        placeholder="Enter amount to burn"
+                        required
+                        type="number"
+                />
+            </div>
+            <button class="btn btn-primary">Burn</button>
+        </form>
     </div>
 
-    <div id="tab-6" class="custom-card w-96 bg-base-100 shadow-xl hidden">
-      <form
-        id="transfer_ownership_form"
-        class="card-body flex flex-col space-y-4"
-      >
-        <div class="flex flex-col gap-2">
-          <label for="t_ownership"
-            >Enter the address to whom you want to transfer ownership or leave
-            blank to block access permanently (renounce ownership)</label
-          >
-          <input
-            type="text"
-            id="t_ownership"
-            name="t_ownership"
-            placeholder="Enter address or leave blank"
-            class="input input-bordered w-full max-w-xs"
-          />
-        </div>
-        <button class="btn btn-primary">Transfer ownership</button>
-      </form>
+    <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-5">
+        <form class="card-body flex flex-col space-y-4" id="batch_burn_form">
+            <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-2">
+                    <label for="batch_burn_address">Wallet address</label>
+                    <input
+                            class="input input-bordered w-full max-w-xs"
+                            id="batch_burn_address"
+                            name="batch_burn_address"
+                            placeholder="Enter address"
+                            required
+                            type="text"
+                    />
+                </div>
+                <label for="batch_burn_ids">Token IDs</label>
+                <textarea
+                        class="textarea textarea-bordered min-h-36 max-h-96"
+                        id="batch_burn_ids"
+                        name="batch_burn_ids"
+                        placeholder="Enter IDs"
+                ></textarea>
+                <label for="batch_burn_amounts">Token amounts</label>
+                <textarea
+                        class="textarea textarea-bordered min-h-36 max-h-96"
+                        id="batch_burn_amounts"
+                        name="batch_burn_amounts"
+                        placeholder="Enter amounts"
+                ></textarea>
+            </div>
+            <button class="btn btn-primary">Batch Burn</button>
+        </form>
     </div>
-  </section>
 
-  <script>
+    <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-6">
+        <form
+                class="card-body flex flex-col space-y-4"
+                id="transfer_ownership_form"
+        >
+            <div class="flex flex-col gap-2">
+                <label for="t_ownership"
+                >Enter the address to whom you want to transfer ownership or leave
+                    blank to block access permanently (renounce ownership)</label
+                >
+                <input
+                        class="input input-bordered w-full max-w-xs"
+                        id="t_ownership"
+                        name="t_ownership"
+                        placeholder="Enter address or leave blank"
+                        type="text"
+                />
+            </div>
+            <button class="btn btn-primary">Transfer ownership</button>
+        </form>
+    </div>
+</section>
+
+<script>
     const tabs = document.querySelectorAll(".tab");
     const cards = document.querySelectorAll(".custom-card");
 
     tabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => {
-        // Remove 'tab-active' class from all tabs
-        tabs.forEach((tab) => tab.classList.remove("tab-active"));
-        // Add 'tab-active' class to the clicked tab
-        tab.classList.add("tab-active");
+        tab.addEventListener("click", () => {
+            // Remove 'tab-active' class from all tabs
+            tabs.forEach((tab) => tab.classList.remove("tab-active"));
+            // Add 'tab-active' class to the clicked tab
+            tab.classList.add("tab-active");
 
-        // Hide all cards
-        cards.forEach((card) => {
-          card.classList.add("hidden");
-          card.classList.remove("card");
+            // Hide all cards
+            cards.forEach((card) => {
+                card.classList.add("hidden");
+                card.classList.remove("card");
+            });
+            // Show the corresponding card (index + 1 because index is 0-based)
+            document.getElementById(`tab-${index + 1}`).classList.remove("hidden");
+            document.getElementById(`tab-${index + 1}`).classList.add("card");
         });
-        // Show the corresponding card (index + 1 because index is 0-based)
-        document.getElementById(`tab-${index + 1}`).classList.remove("hidden");
-        document.getElementById(`tab-${index + 1}`).classList.add("card");
-      });
     });
-  </script>
+</script>
 
-  <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-  <!--loading animation-->
-  <script>
-    const loader = document.getElementById("loader");
-    const content = document.getElementById("content");
+<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
 
-    var typed = new Typed("#init-text", {
-      strings: ["Initializing app...", "Get contract info..."],
-      typeSpeed: 30,
-      backSpeed: 0,
-    });
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.12.1/ethers.umd.min.js"
+        type="application/javascript"
+></script>
 
-    setTimeout(() => {
-      loader.classList.remove("flex");
-      loader.classList.add("hidden");
-
-      content.classList.remove("hidden");
-    }, 3000);
-  </script>
-
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.12.1/ethers.umd.min.js"
-    type="application/javascript"
-  ></script>
-
-  <script>
+<script>
     const abi = [
-      "constructor(string _name, string _symbol) payable",
-      "event OwnershipTransferred(address indexed user, address indexed newOwner)",
-      "event TransferBatch(address indexed operator, address indexed from, address indexed to, uint256[] ids, uint256[] amounts)",
-      "event TransferSingle(address indexed operator, address indexed from, address indexed to, uint256 id, uint256 amount)",
-      "event URI(string value, uint256 indexed id)",
-      "function balanceOf(address, uint256) view returns (uint256)",
-      "function balanceOfBatch(address[] owners, uint256[] ids) view returns (uint256[] balances)",
-      "function batchBurn(address from, uint256[] tokenIds, uint256[] amounts)",
-      "function batchMint(address to, uint256[] tokenIds, uint256[] amounts)",
-      "function burn(address from, uint256 tokenId, uint256 amount)",
-      "function mint(address to, uint256 tokenId, uint256 amount)",
-      "function myAddr() view returns (address)",
-      "function name() view returns (string)",
-      "function owner() view returns (address)",
-      "function setURI(uint256 tokenId, string tokenURI)",
-      "function supportsInterface(bytes4 interfaceId) view returns (bool)",
-      "function symbol() view returns (string)",
-      "function transferOwnership(address newOwner)",
-      "function uri(uint256 tokenId) view returns (string)",
+        "constructor(string _name, string _symbol) payable",
+        "event OwnershipTransferred(address indexed user, address indexed newOwner)",
+        "event TransferBatch(address indexed operator, address indexed from, address indexed to, uint256[] ids, uint256[] amounts)",
+        "event TransferSingle(address indexed operator, address indexed from, address indexed to, uint256 id, uint256 amount)",
+        "event URI(string value, uint256 indexed id)",
+        "function balanceOf(address, uint256) view returns (uint256)",
+        "function balanceOfBatch(address[] owners, uint256[] ids) view returns (uint256[] balances)",
+        "function batchBurn(address from, uint256[] tokenIds, uint256[] amounts)",
+        "function batchMint(address to, uint256[] tokenIds, uint256[] amounts)",
+        "function burn(address from, uint256 tokenId, uint256 amount)",
+        "function mint(address to, uint256 tokenId, uint256 amount)",
+        "function myAddr() view returns (address)",
+        "function name() view returns (string)",
+        "function owner() view returns (address)",
+        "function setURI(uint256 tokenId, string tokenURI)",
+        "function supportsInterface(bytes4 interfaceId) view returns (bool)",
+        "function symbol() view returns (string)",
+        "function transferOwnership(address newOwner)",
+        "function uri(uint256 tokenId) view returns (string)",
     ];
 
     let contractAddress;
 
     const getAddress = async () => {
-      setTimeout(() => {
-        contractAddress = document.getElementById("future_address").innerHTML;
-      }, 2000);
+        setTimeout(() => {
+            contractAddress = document.getElementById("future_address").innerHTML;
+        }, 2000);
     };
 
     getAddress();
@@ -448,312 +420,312 @@
     let connectContract;
 
     const initApp = async () => {
-      // forward
-      provider = new ethers.BrowserProvider(this.parent.ethereum);
-      signer = await provider.getSigner();
+        // forward
+        provider = new ethers.BrowserProvider(this.parent.ethereum);
+        signer = await provider.getSigner();
 
-      connectContract = new ethers.Contract(contractAddress, abi, signer);
-      console.log("Account:", await signer.getAddress());
-      // forward
+        connectContract = new ethers.Contract(contractAddress, abi, signer);
+        console.log("Account:", await signer.getAddress());
+        // forward
 
-      // test chain
-      // const privateKey =
-      //   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-      // const provider = ethers.getDefaultProvider("http://localhost:8545/");
-      // const contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
-      // const walletWithProvider = new ethers.Wallet(privateKey, provider);
-      // const contract = new ethers.Contract(contractAddress, abi, provider);
-      // connectContract = contract.connect(walletWithProvider);
-      // test chain
+        // test chain
+        // const privateKey =
+        //   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+        // const provider = ethers.getDefaultProvider("http://localhost:8545/");
+        // const contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
+        // const walletWithProvider = new ethers.Wallet(privateKey, provider);
+        // const contract = new ethers.Contract(contractAddress, abi, provider);
+        // connectContract = contract.connect(walletWithProvider);
+        // test chain
     };
     setTimeout(() => {
-      initApp();
+        initApp();
     }, 3000);
-  </script>
-  <script
-    type="text/javascript"
-    src="https://cdn.jsdelivr.net/npm/toastify-js"
-  ></script>
-  <script>
+</script>
+<script
+        src="https://cdn.jsdelivr.net/npm/toastify-js"
+        type="text/javascript"
+></script>
+<script>
     const mintForm = document.getElementById("mint_form");
     const batchMintForm = document.getElementById("batch_mint_form");
     const setUriForm = document.getElementById("set_uri_form");
     const burnForm = document.getElementById("burn_form");
     const batchBurnForm = document.getElementById("batch_burn_form");
     const transferOwnershipForm = document.getElementById(
-      "transfer_ownership_form"
+        "transfer_ownership_form"
     );
 
     transferOwnershipForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      let error = false;
-      const formData = new FormData(transferOwnershipForm);
-      const to = formData.get("t_ownership");
+        event.preventDefault();
+        let error = false;
+        const formData = new FormData(transferOwnershipForm);
+        const to = formData.get("t_ownership");
 
-      if (!to) {
-        // ничего не ввел
-        try {
-          await connectContract.transferOwnership(
-            "0x0000000000000000000000000000000000000000"
-          );
-          console.log(await connectContract.owner());
-          Toastify({
-            text: `Success renounce ownership!`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
-        } catch (e) {
-          console.log(e);
-          Toastify({
-            text: `Error call transferOwnership!`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
-        }
-      } else {
-        if (!/^0x[a-fA-F0-9]{40}$/.test(to)) {
-          Toastify({
-            text: `Wrong address: ${to}`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
-        }
-        console.log(await connectContract.owner());
-        error = true;
-        if (!error) {
-          try {
-            await connectContract.transferOwnership(to);
-            Toastify({
-              text: `Success transferOwnership!`,
-              position: "right",
-              gravity: "top",
-            }).showToast();
+        if (!to) {
+            // ничего не ввел
+            try {
+                await connectContract.transferOwnership(
+                    "0x0000000000000000000000000000000000000000"
+                );
+                console.log(await connectContract.owner());
+                Toastify({
+                    text: `Success renounce ownership!`,
+                    position: "right",
+                    gravity: "top",
+                }).showToast();
+            } catch (e) {
+                console.log(e);
+                Toastify({
+                    text: `Error call transferOwnership!`,
+                    position: "right",
+                    gravity: "top",
+                }).showToast();
+            }
+        } else {
+            if (!/^0x[a-fA-F0-9]{40}$/.test(to)) {
+                Toastify({
+                    text: `Wrong address: ${to}`,
+                    position: "right",
+                    gravity: "top",
+                }).showToast();
+            }
             console.log(await connectContract.owner());
-            transferOwnershipForm.reset();
-          } catch (e) {
-            console.log(e);
-            Toastify({
-              text: `Error call transferOwnership!`,
-              position: "right",
-              gravity: "top",
-            }).showToast();
-          }
+            error = true;
+            if (!error) {
+                try {
+                    await connectContract.transferOwnership(to);
+                    Toastify({
+                        text: `Success transferOwnership!`,
+                        position: "right",
+                        gravity: "top",
+                    }).showToast();
+                    console.log(await connectContract.owner());
+                    transferOwnershipForm.reset();
+                } catch (e) {
+                    console.log(e);
+                    Toastify({
+                        text: `Error call transferOwnership!`,
+                        position: "right",
+                        gravity: "top",
+                    }).showToast();
+                }
+            }
         }
-      }
     });
 
     mintForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      let error = false;
-      const formData = new FormData(mintForm);
-      const to = formData.get("mint_address");
-      const id = formData.get("mint_id");
-      const amount = formData.get("mint_amount");
+        event.preventDefault();
+        let error = false;
+        const formData = new FormData(mintForm);
+        const to = formData.get("mint_address");
+        const id = formData.get("mint_id");
+        const amount = formData.get("mint_amount");
 
-      if (!/^0x[a-fA-F0-9]{40}$/.test(to)) {
-        Toastify({
-          text: `Wrong address: ${to}`,
-          className: "error",
-          position: "right",
-          gravity: "top",
-        }).showToast();
-        error = true;
-      }
-      if (!error) {
-        try {
-          await connectContract.mint(to, id, amount);
-          mintForm.reset();
-          Toastify({
-            text: `Successfull mint!`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
-        } catch (e) {
-          console.log(e);
-          Toastify({
-            text: `Error call mint!`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
+        if (!/^0x[a-fA-F0-9]{40}$/.test(to)) {
+            Toastify({
+                text: `Wrong address: ${to}`,
+                className: "error",
+                position: "right",
+                gravity: "top",
+            }).showToast();
+            error = true;
         }
-      }
+        if (!error) {
+            try {
+                await connectContract.mint(to, id, amount);
+                mintForm.reset();
+                Toastify({
+                    text: `Successfull mint!`,
+                    position: "right",
+                    gravity: "top",
+                }).showToast();
+            } catch (e) {
+                console.log(e);
+                Toastify({
+                    text: `Error call mint!`,
+                    position: "right",
+                    gravity: "top",
+                }).showToast();
+            }
+        }
     });
 
     burnForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      let error = false;
-      const formData = new FormData(burnForm);
-      const from = formData.get("burn_address");
-      const id = formData.get("burn_id");
-      const amount = formData.get("burn_amount");
+        event.preventDefault();
+        let error = false;
+        const formData = new FormData(burnForm);
+        const from = formData.get("burn_address");
+        const id = formData.get("burn_id");
+        const amount = formData.get("burn_amount");
 
-      if (!/^0x[a-fA-F0-9]{40}$/.test(from)) {
-        Toastify({
-          text: `Wrong address: ${from}`,
-          className: "error",
-          position: "right",
-          gravity: "top",
-        }).showToast();
-        error = true;
-      }
-
-      if (!error) {
-        try {
-          await connectContract.burn(from, id, amount);
-          burnForm.reset();
-          Toastify({
-            text: `Successfull burn!`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
-        } catch (e) {
-          console.log(e.reason);
-          Toastify({
-            text: `Error call burn! ${e.reason}`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
+        if (!/^0x[a-fA-F0-9]{40}$/.test(from)) {
+            Toastify({
+                text: `Wrong address: ${from}`,
+                className: "error",
+                position: "right",
+                gravity: "top",
+            }).showToast();
+            error = true;
         }
-      }
+
+        if (!error) {
+            try {
+                await connectContract.burn(from, id, amount);
+                burnForm.reset();
+                Toastify({
+                    text: `Successfull burn!`,
+                    position: "right",
+                    gravity: "top",
+                }).showToast();
+            } catch (e) {
+                console.log(e.reason);
+                Toastify({
+                    text: `Error call burn! ${e.reason}`,
+                    position: "right",
+                    gravity: "top",
+                }).showToast();
+            }
+        }
     });
 
     batchMintForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      let error = false;
-      const formData = new FormData(batchMintForm);
-      const to = formData.get("batch_mint_address");
-      const idsData = formData.get("batch_mint_ids");
-      const ids = idsData
-        .split("\n")
-        .map((ids) => ids.trim())
-        .filter((ids) => ids.trim() !== "");
+        event.preventDefault();
+        let error = false;
+        const formData = new FormData(batchMintForm);
+        const to = formData.get("batch_mint_address");
+        const idsData = formData.get("batch_mint_ids");
+        const ids = idsData
+            .split("\n")
+            .map((ids) => ids.trim())
+            .filter((ids) => ids.trim() !== "");
 
-      const amountsData = formData.get("batch_mint_amounts");
-      const amounts = amountsData
-        .split("\n")
-        .map((amounts) => amounts.trim())
-        .filter((amounts) => amounts.trim() !== "");
+        const amountsData = formData.get("batch_mint_amounts");
+        const amounts = amountsData
+            .split("\n")
+            .map((amounts) => amounts.trim())
+            .filter((amounts) => amounts.trim() !== "");
 
-      if (!/^0x[a-fA-F0-9]{40}$/.test(to)) {
-        Toastify({
-          text: `Wrong address: ${to}`,
-          className: "error",
-          position: "right",
-          gravity: "top",
-        }).showToast();
-        error = true;
-      }
-
-      if (amounts.length != ids.length) {
-        Toastify({
-          text: `The number of ids and amounts did not match!`,
-          position: "right",
-          gravity: "top",
-        }).showToast();
-        error = true;
-      }
-
-      if (!error) {
-        try {
-          await connectContract.batchMint(to, ids, amounts);
-          batchMintForm.reset();
-          Toastify({
-            text: `Successfull batchMint!`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
-        } catch (e) {
-          console.log(e);
-          Toastify({
-            text: `Error call batchMint`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
+        if (!/^0x[a-fA-F0-9]{40}$/.test(to)) {
+            Toastify({
+                text: `Wrong address: ${to}`,
+                className: "error",
+                position: "right",
+                gravity: "top",
+            }).showToast();
+            error = true;
         }
-      }
+
+        if (amounts.length != ids.length) {
+            Toastify({
+                text: `The number of ids and amounts did not match!`,
+                position: "right",
+                gravity: "top",
+            }).showToast();
+            error = true;
+        }
+
+        if (!error) {
+            try {
+                await connectContract.batchMint(to, ids, amounts);
+                batchMintForm.reset();
+                Toastify({
+                    text: `Successfull batchMint!`,
+                    position: "right",
+                    gravity: "top",
+                }).showToast();
+            } catch (e) {
+                console.log(e);
+                Toastify({
+                    text: `Error call batchMint`,
+                    position: "right",
+                    gravity: "top",
+                }).showToast();
+            }
+        }
     });
 
     batchBurnForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      let error = false;
-      const formData = new FormData(batchBurnForm);
-      const from = formData.get("batch_burn_address");
-      const idsData = formData.get("batch_burn_ids");
-      const ids = idsData
-        .split("\n")
-        .map((ids) => ids.trim())
-        .filter((ids) => ids.trim() !== "");
+        event.preventDefault();
+        let error = false;
+        const formData = new FormData(batchBurnForm);
+        const from = formData.get("batch_burn_address");
+        const idsData = formData.get("batch_burn_ids");
+        const ids = idsData
+            .split("\n")
+            .map((ids) => ids.trim())
+            .filter((ids) => ids.trim() !== "");
 
-      const amountsData = formData.get("batch_burn_amounts");
-      const amounts = amountsData
-        .split("\n")
-        .map((amounts) => amounts.trim())
-        .filter((amounts) => amounts.trim() !== "");
+        const amountsData = formData.get("batch_burn_amounts");
+        const amounts = amountsData
+            .split("\n")
+            .map((amounts) => amounts.trim())
+            .filter((amounts) => amounts.trim() !== "");
 
-      if (!/^0x[a-fA-F0-9]{40}$/.test(from)) {
-        Toastify({
-          text: `Wrong address: ${from}`,
-          className: "error",
-          position: "right",
-          gravity: "top",
-        }).showToast();
-        error = true;
-      }
-
-      if (amounts.length != ids.length) {
-        Toastify({
-          text: `The number of ids and amounts did not match!`,
-          position: "right",
-          gravity: "top",
-        }).showToast();
-        error = true;
-      }
-
-      if (!error) {
-        try {
-          await connectContract.batchBurn(from, ids, amounts);
-          batchBurnForm.reset();
-          Toastify({
-            text: `Successfull burn!`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
-        } catch (e) {
-          console.log(e);
-          Toastify({
-            text: `Error call batchMint`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
+        if (!/^0x[a-fA-F0-9]{40}$/.test(from)) {
+            Toastify({
+                text: `Wrong address: ${from}`,
+                className: "error",
+                position: "right",
+                gravity: "top",
+            }).showToast();
+            error = true;
         }
-      }
+
+        if (amounts.length != ids.length) {
+            Toastify({
+                text: `The number of ids and amounts did not match!`,
+                position: "right",
+                gravity: "top",
+            }).showToast();
+            error = true;
+        }
+
+        if (!error) {
+            try {
+                await connectContract.batchBurn(from, ids, amounts);
+                batchBurnForm.reset();
+                Toastify({
+                    text: `Successfull burn!`,
+                    position: "right",
+                    gravity: "top",
+                }).showToast();
+            } catch (e) {
+                console.log(e);
+                Toastify({
+                    text: `Error call batchMint`,
+                    position: "right",
+                    gravity: "top",
+                }).showToast();
+            }
+        }
     });
 
     setUriForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      let error = false;
-      const formData = new FormData(setUriForm);
-      const uri = formData.get("set_uri");
-      const id = formData.get("set_id");
+        event.preventDefault();
+        let error = false;
+        const formData = new FormData(setUriForm);
+        const uri = formData.get("set_uri");
+        const id = formData.get("set_id");
 
-      if (!error) {
-        try {
-          await connectContract.setURI(id, uri);
-          setUriForm.reset();
-          Toastify({
-            text: `Successfull set uri!`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
-        } catch (e) {
-          console.log(e);
-          Toastify({
-            text: `Error call!`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
+        if (!error) {
+            try {
+                await connectContract.setURI(id, uri);
+                setUriForm.reset();
+                Toastify({
+                    text: `Successfull set uri!`,
+                    position: "right",
+                    gravity: "top",
+                }).showToast();
+            } catch (e) {
+                console.log(e);
+                Toastify({
+                    text: `Error call!`,
+                    position: "right",
+                    gravity: "top",
+                }).showToast();
+            }
         }
-      }
     });
-  </script>
+</script>
 </body>
