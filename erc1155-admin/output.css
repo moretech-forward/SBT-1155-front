@@ -8590,14 +8590,6 @@ html:has(.drawer-open.drawer-open) {
   display: none;
 }
 
-.max-h-96 {
-  max-height: 24rem;
-}
-
-.min-h-36 {
-  min-height: 9rem;
-}
-
 .w-96 {
   width: 24rem;
 }
@@ -9797,12 +9789,21 @@ html:has(.drawer-open.drawer-open) {
   line-height: 2.25rem;
 }
 
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
 .font-bold {
   font-weight: 700;
 }
 
 .font-extrabold {
   font-weight: 800;
+}
+
+.font-semibold {
+  font-weight: 600;
 }
 
 .uppercase {

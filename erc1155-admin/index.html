@@ -95,6 +95,10 @@
     <h1 class="text-center text-3xl font-extrabold text-white">
       Soulbound Token (ERC1155) - Admin
     </h1>
+    <h2
+      id="collection-name"
+      class="text-center text-xl font-semibold text-white"
+    ></h2>
     <div class="px-10 pt-10">
       <button class="btn" onclick="my_modal_1.showModal()">Read info</button>
       <dialog class="modal" id="my_modal_1">
@@ -140,17 +144,11 @@
       >
         Mint
       </a>
-      <a class="tab transition-all duration-200" id="batch-mint-tab" role="tab">
-        Batch Mint
-      </a>
       <a class="tab transition-all duration-200" id="set-tab" role="tab">
         Set URI
       </a>
       <a class="tab transition-all duration-200" id="burn-tab" role="tab">
         Burn
-      </a>
-      <a class="tab transition-all duration-200" id="burn-batch-tab" role="tab">
-        Batch Burn
       </a>
       <a class="tab transition-all duration-200" id="transfer-tab" role="tab">
         Transfer ownership
@@ -197,39 +195,6 @@
     </div>
 
     <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-2">
-      <form class="card-body flex flex-col space-y-4" id="batch_mint_form">
-        <div class="flex flex-col gap-2">
-          <div class="flex flex-col gap-2">
-            <label for="batch_mint_address">Wallet address</label>
-            <input
-              class="input input-bordered w-full max-w-xs"
-              id="batch_mint_address"
-              name="batch_mint_address"
-              placeholder="Enter address"
-              required
-              type="text"
-            />
-          </div>
-          <label for="batch_mint_ids">Token IDs</label>
-          <textarea
-            class="textarea textarea-bordered min-h-36 max-h-96"
-            id="batch_mint_ids"
-            name="batch_mint_ids"
-            placeholder="Enter IDs"
-          ></textarea>
-          <label for="batch_mint_amounts">Token amounts</label>
-          <textarea
-            class="textarea textarea-bordered min-h-36 max-h-96"
-            id="batch_mint_amounts"
-            name="batch_mint_amounts"
-            placeholder="Enter amounts"
-          ></textarea>
-        </div>
-        <button class="btn btn-primary">Batch Mint</button>
-      </form>
-    </div>
-
-    <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-3">
       <form class="card-body flex flex-col space-y-4" id="set_uri_form">
         <div class="flex flex-col gap-2">
           <label for="set_id">Token ID</label>
@@ -257,7 +222,7 @@
       </form>
     </div>
 
-    <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-4">
+    <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-3">
       <form class="card-body flex flex-col space-y-4" id="burn_form">
         <div class="flex flex-col gap-2">
           <label for="burn_address">Wallet address</label>
@@ -296,40 +261,7 @@
       </form>
     </div>
 
-    <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-5">
-      <form class="card-body flex flex-col space-y-4" id="batch_burn_form">
-        <div class="flex flex-col gap-2">
-          <div class="flex flex-col gap-2">
-            <label for="batch_burn_address">Wallet address</label>
-            <input
-              class="input input-bordered w-full max-w-xs"
-              id="batch_burn_address"
-              name="batch_burn_address"
-              placeholder="Enter address"
-              required
-              type="text"
-            />
-          </div>
-          <label for="batch_burn_ids">Token IDs</label>
-          <textarea
-            class="textarea textarea-bordered min-h-36 max-h-96"
-            id="batch_burn_ids"
-            name="batch_burn_ids"
-            placeholder="Enter IDs"
-          ></textarea>
-          <label for="batch_burn_amounts">Token amounts</label>
-          <textarea
-            class="textarea textarea-bordered min-h-36 max-h-96"
-            id="batch_burn_amounts"
-            name="batch_burn_amounts"
-            placeholder="Enter amounts"
-          ></textarea>
-        </div>
-        <button class="btn btn-primary">Batch Burn</button>
-      </form>
-    </div>
-
-    <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-6">
+    <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-4">
       <form
         class="card-body flex flex-col space-y-4"
         id="transfer_ownership_form"
@@ -421,26 +353,36 @@
 
     const initApp = async () => {
       // forward
-      provider = new ethers.BrowserProvider(this.parent.ethereum);
-      signer = await provider.getSigner();
+      // provider = new ethers.BrowserProvider(this.parent.ethereum);
+      // signer = await provider.getSigner();
 
-      connectContract = new ethers.Contract(contractAddress, abi, signer);
-      console.log("Account:", await signer.getAddress());
+      // connectContract = new ethers.Contract(contractAddress, abi, signer);
+      // console.log("Account:", await signer.getAddress());
       // forward
 
       // test chain
-      // const privateKey =
-      //   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-      // const provider = ethers.getDefaultProvider("http://localhost:8545/");
-      // const contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
-      // const walletWithProvider = new ethers.Wallet(privateKey, provider);
-      // const contract = new ethers.Contract(contractAddress, abi, provider);
-      // connectContract = contract.connect(walletWithProvider);
+      const privateKey =
+        "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+      const provider = ethers.getDefaultProvider("http://localhost:8545/");
+      contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
+      const walletWithProvider = new ethers.Wallet(privateKey, provider);
+      const contract = new ethers.Contract(contractAddress, abi, provider);
+      connectContract = contract.connect(walletWithProvider);
       // test chain
+
+      getCollectionName();
     };
     setTimeout(() => {
       initApp();
     }, 3000);
+
+    const getCollectionName = async () => {
+      const collectionName = await connectContract.name();
+      const collectionSymbol = await connectContract.symbol();
+      document.getElementById(
+        "collection-name"
+      ).innerText = `${collectionName} (${collectionSymbol})`;
+    };
   </script>
   <script
     src="https://cdn.jsdelivr.net/npm/toastify-js"

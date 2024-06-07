@@ -96,13 +96,20 @@
     <h1 class="text-center text-3xl font-extrabold text-white">
       Soulbound Token (ERC1155)
     </h1>
+    <h2
+      id="collection-name"
+      class="text-center text-xl font-semibold text-white"
+    ></h2>
     <div role="tablist" class="tabs tabs-boxed">
       <a
         role="tab"
-        id="nft-tab"
+        id="my-sbt-tab"
         class="tab tab-active transition-all duration-200"
       >
-        All NFT
+        My SBT
+      </a>
+      <a role="tab" id="all-sbt-tab" class="tab transition-all duration-200">
+        All SBT
       </a>
     </div>
     <div
@@ -144,36 +151,31 @@
       "function uri(uint256 tokenId) view returns (string)",
     ];
 
-    // const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-    // const privateKey =
-    //   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-
-    let contractAddress;
-    const getAddress = async () => {
-      contractAddress = document.getElementById("future_address").innerHTML;
-    };
-
-    let provider, wallet, contract;
+    let provider, wallet, contract, address;
+    const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+    const privateKey =
+      "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 
     async function connectToContract() {
-      provider = new ethers.providers.Web3Provider(this.parent.ethereum);
-      wallet = provider.getSigner();
+      provider = new ethers.providers.JsonRpcProvider();
+      wallet = new ethers.Wallet(privateKey, provider);
       contract = new ethers.Contract(contractAddress, abi, wallet);
-      // provider = new ethers.providers.JsonRpcProvider();
-      // wallet = new ethers.Wallet(privateKey, provider);
-      // contract = new ethers.Contract(contractAddress, abi, wallet);
+
+      address = await wallet.getAddress();
+      getCollectionName();
     }
 
-    setTimeout(() => {
-      getAddress();
-      connectToContract();
-    }, 2100);
-  </script>
+    const getCollectionName = async () => {
+      const collectionName = await contract.name();
+      const collectionSymbol = await contract.symbol();
+      document.getElementById(
+        "collection-name"
+      ).innerText = `${collectionName} (${collectionSymbol})`;
+    };
 
-  <script>
     function shortenAddress(address) {
-      if (address.length < 10) return address; // Если адрес слишком короткий, возвращаем его как есть
-      return address.slice(0, 6) + "..." + address.slice(-5); // Возвращаем сокращенный адрес
+      if (address.length < 10) return address;
+      return address.slice(0, 6) + "..." + address.slice(-5);
     }
 
     const customCallToast = (msg) => {
@@ -185,68 +187,33 @@
     };
 
     let nfts = [];
-    let batch_nfts = [];
+
     const getNfts = async () => {
+      nfts.length = 0;
       const get_nfts = await contract.queryFilter("TransferSingle");
       get_nfts.forEach((nft) => {
         nfts.push(nft.args);
       });
+    };
 
-      const batch_events = await contract.queryFilter("TransferBatch");
+    const getMyNfts = async (myAddress) => {
+      nfts.length = 0;
 
-      batch_events.forEach((nft) => {
-        batch_nfts.push(nft.args);
+      const get_nfts = await contract.queryFilter("TransferSingle");
+      get_nfts.forEach((nft) => {
+        if (nft.args.to === myAddress) {
+          nfts.push(nft.args);
+        }
       });
     };
 
-    const renderNfts = async () => {
+    const renderNfts = async (nftsToRender) => {
       const section = document.getElementById("nft-cards");
       section.innerHTML = "";
-      // console.log(nfts.length);
-
-      const batch_nftMap = new Map();
-
-      for (let item in batch_nfts) {
-        const nft = batch_nfts[item];
-        const to = nft[2];
-        const ids = nft[3];
-        const amounts = nft[4];
-
-        if (to !== "0x0000000000000000000000000000000000000000") {
-          for (let index = 0; index < ids.length; index++) {
-            const id = ids[index];
-            const key = `${id}-${to}`;
-            if (!batch_nftMap.has(key)) {
-              const balance = (await contract.balanceOf(to, id)).toString();
-              if (balance !== "0") {
-                // Проверка баланса перед добавлением
-                batch_nftMap.set(key, {
-                  id: id,
-                  to: to,
-                  balance: balance,
-                });
-              }
-            }
-          }
-        }
-      }
-
-      // Вывод уникальных NFT
-      const batchResults = Array.from(batch_nftMap.values());
-
-      for (let item in nfts) {
-        const nft = nfts[item];
-        const to = nft[2];
-        const id = nft[3];
-        const amount = nft[4];
-
-        const balance = (await contract.balanceOf(to, id)).toString();
-      }
 
       const nftMap = new Map();
 
-      // Перебираем начальный массив, фильтруя повторения
-      for (const nft of nfts) {
+      for (const nft of nftsToRender) {
         const key = `${nft.id}-${nft.to}`;
         if (
           !nftMap.has(key) &&
@@ -255,7 +222,6 @@
           const balance = (await contract.balanceOf(nft.to, nft.id)).toString();
 
           if (balance !== "0") {
-            // Проверка баланса перед добавлением
             nftMap.set(key, {
               id: nft.id,
               to: nft.to,
@@ -265,36 +231,11 @@
         }
       }
 
-      // Преобразуем Map обратно в массив для удобства
-      const nftResults = Array.from(nftMap.values());
-
-      // Вывод результатов
-      //console.log(results);
-      // Создание нового Map для уникализации данных
-      const uniqueMap = new Map();
-
-      // Функция для добавления элементов в Map для уникализации
-      function addUniqueItems(items) {
-        items.forEach((item) => {
-          const key = `${item.id}-${item.to}-${item.balance}`; // Создание уникального ключа, включая balance
-          if (!uniqueMap.has(key)) {
-            uniqueMap.set(key, item);
-          }
-        });
-      }
-
-      // Добавление элементов из обоих массивов
-      addUniqueItems(batchResults);
-      addUniqueItems(nftResults);
-
-      // Получение уникального массива из Map
-      const results = Array.from(uniqueMap.values()).sort((a, b) => {
-        return a.id - b.id; // Сортировка по возрастанию id
+      const nftResults = Array.from(nftMap.values()).sort((a, b) => {
+        return a.id - b.id;
       });
-      //const results = [...batchResults, ...nftResults];
 
-      for (let item in results) {
-        const nft = results[item];
+      for (let nft of nftResults) {
         const ownerAddress = nft.to;
         const id = nft.id;
         const amount = nft.balance;
@@ -309,56 +250,76 @@
           const json = await res.json();
 
           section.innerHTML += `
-                    <div class="card max-w-[320px] bg-base-100 shadow-xl">
-                        <figure>
-                            <img
-                                src="${
-                                  json.image
-                                    ? json.image
-                                    : "https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece"
-                                }"
-                                alt="Shoes"
-                                class="max-h-[250px] w-full object-cover"
-                            />
-                        </figure>
-                        <div class="card-body">
-                            <h2 class="card-title">${
-                              json.name ? json.name : "Name not defined"
-                            }</h2>
-
-                            <div class="flex flex-col gap-2 text-xl font-medium">
-                                <div class="flex items-center justify-between w-full">
-                                    <p>ID:</p> <p class="text-lg font-normal text-end">${id}</p>
-                                </div>
-                                <div class="flex items-center justify-between w-full">
-                                    <p>Owner:</p> <p class="text-lg font-normal text-end">${shortenAddress(
-                                      ownerAddress
-                                    )}</p>
-                                </div>
-                                <div class="flex items-center justify-between w-full">
-                                    <p>Amount:</p> <p class="text-lg font-normal text-end">${amount}</p>
-                                </div>
-                            </div>
-
-                            <p>
-                                ${
-                                  json.description
-                                    ? json.description
-                                    : "Description not found"
-                                }
-                            </p>
+            <div class="card max-w-[320px] bg-base-100 shadow-xl">
+                <figure>
+                    <img
+                        src="${
+                          json.image
+                            ? json.image
+                            : "https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece"
+                        }"
+                        alt="Shoes"
+                        class="max-h-[250px] w-full object-cover"
+                    />
+                </figure>
+                <div class="card-body">
+                    <h2 class="card-title">${
+                      json.name ? json.name : "Name not defined"
+                    }</h2>
+                    <div class="flex flex-col gap-2 text-xl font-medium">
+                        <div class="flex items-center justify-between w-full">
+                            <p>ID:</p> <p class="text-lg font-normal text-end">${id}</p>
+                        </div>
+                        <div class="flex items-center justify-between w-full">
+                            <p>Owner:</p> <p class="text-lg font-normal text-end">${shortenAddress(
+                              ownerAddress
+                            )}</p>
+                        </div>
+                        <div class="flex items-center justify-between w-full">
+                            <p>Amount:</p> <p class="text-lg font-normal text-end">${amount}</p>
                         </div>
                     </div>
+                    <p>${
+                      json.description
+                        ? json.description
+                        : "Description not found"
+                    }</p>
                 </div>
-                `;
+            </div>
+          `;
         } catch (err) {
           customCallToast(`Failed to withdraw nft with id: ${id}`);
         }
       }
     };
 
+    document.addEventListener("DOMContentLoaded", () => {
+      const mySbtTab = document.getElementById("my-sbt-tab");
+      const allSbtTab = document.getElementById("all-sbt-tab");
+
+      mySbtTab.addEventListener("click", () => {
+        mySbtTab.classList.add("tab-active");
+        allSbtTab.classList.remove("tab-active");
+        getMyNfts(address).then(() => {
+          renderNfts(nfts);
+        });
+      });
+
+      allSbtTab.addEventListener("click", () => {
+        allSbtTab.classList.add("tab-active");
+        mySbtTab.classList.remove("tab-active");
+        getNfts().then(() => {
+          renderNfts(nfts);
+        });
+      });
+
+      setTimeout(() => {
+        mySbtTab.click();
+      }, 1400);
+    });
+
     setTimeout(() => {
-      getNfts().then(renderNfts);
-    }, 3000);
+      connectToContract();
+    }, 1100);
   </script>
 </body>
