@@ -151,23 +151,42 @@
       "function uri(uint256 tokenId) view returns (string)",
     ];
 
-    let provider, wallet, contract, address;
-    const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-    const privateKey =
-      "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+    let provider, wallet, connectContract, address, contractAddress;
+
+    const getAddress = async () => {
+      setTimeout(() => {
+        contractAddress = document.getElementById("future_address").innerHTML;
+        console.log("Contract:", contractAddress);
+      }, 2000);
+    };
+
+    getAddress();
 
     async function connectToContract() {
-      provider = new ethers.providers.JsonRpcProvider();
-      wallet = new ethers.Wallet(privateKey, provider);
-      contract = new ethers.Contract(contractAddress, abi, wallet);
+      // test chain
+      // contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+      // const privateKey =
+      //   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+      // provider = new ethers.providers.JsonRpcProvider();
+      // wallet = new ethers.Wallet(privateKey, provider);
+      // connectContract = new ethers.Contract(contractAddress, abi, wallet);
+      // test chain
+
+      // forward
+      provider = new ethers.providers.Web3Provider(this.parent.ethereum);
+      wallet = await provider.getSigner();
+      connectContract = new ethers.Contract(contractAddress, abi, wallet);
+      // forward
 
       address = await wallet.getAddress();
+      console.log("Account:", address);
+
       getCollectionName();
     }
 
     const getCollectionName = async () => {
-      const collectionName = await contract.name();
-      const collectionSymbol = await contract.symbol();
+      const collectionName = await connectContract.name();
+      const collectionSymbol = await connectContract.symbol();
       document.getElementById(
         "collection-name"
       ).innerText = `${collectionName} (${collectionSymbol})`;
@@ -190,7 +209,8 @@
 
     const getNfts = async () => {
       nfts.length = 0;
-      const get_nfts = await contract.queryFilter("TransferSingle");
+      const get_nfts = await connectContract.queryFilter("TransferSingle");
+
       get_nfts.forEach((nft) => {
         nfts.push(nft.args);
       });
@@ -199,7 +219,7 @@
     const getMyNfts = async (myAddress) => {
       nfts.length = 0;
 
-      const get_nfts = await contract.queryFilter("TransferSingle");
+      const get_nfts = await connectContract.queryFilter("TransferSingle");
       get_nfts.forEach((nft) => {
         if (nft.args.to === myAddress) {
           nfts.push(nft.args);
@@ -219,7 +239,9 @@
           !nftMap.has(key) &&
           nft.to !== "0x0000000000000000000000000000000000000000"
         ) {
-          const balance = (await contract.balanceOf(nft.to, nft.id)).toString();
+          const balance = (
+            await connectContract.balanceOf(nft.to, nft.id)
+          ).toString();
 
           if (balance !== "0") {
             nftMap.set(key, {
@@ -241,54 +263,87 @@
         const amount = nft.balance;
 
         try {
-          const link = await contract.uri(id);
-          if (!link.startsWith("http")) {
-            customCallToast(`Invalid link for nft with id: ${id}`);
-            continue;
+          const link = await connectContract.uri(id);
+          let json = {
+            name: "Name not defined",
+            description: "Description not found",
+            image:
+              "https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece",
+          };
+
+          if (link.startsWith("http")) {
+            const res = await fetch(link);
+            json = await res.json();
+          } else {
+            //customCallToast(`Invalid link for NFT with ID: ${id}`);
           }
-          const res = await fetch(link);
-          const json = await res.json();
 
           section.innerHTML += `
-            <div class="card max-w-[320px] bg-base-100 shadow-xl">
-                <figure>
-                    <img
-                        src="${
-                          json.image
-                            ? json.image
-                            : "https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece"
-                        }"
-                        alt="Shoes"
-                        class="max-h-[250px] w-full object-cover"
-                    />
-                </figure>
-                <div class="card-body">
-                    <h2 class="card-title">${
-                      json.name ? json.name : "Name not defined"
-                    }</h2>
-                    <div class="flex flex-col gap-2 text-xl font-medium">
-                        <div class="flex items-center justify-between w-full">
-                            <p>ID:</p> <p class="text-lg font-normal text-end">${id}</p>
-                        </div>
-                        <div class="flex items-center justify-between w-full">
-                            <p>Owner:</p> <p class="text-lg font-normal text-end">${shortenAddress(
-                              ownerAddress
-                            )}</p>
-                        </div>
-                        <div class="flex items-center justify-between w-full">
-                            <p>Amount:</p> <p class="text-lg font-normal text-end">${amount}</p>
-                        </div>
+        <div class="card max-w-[320px] bg-base-100 shadow-xl">
+            <figure>
+                <img
+                    src="${json.image}"
+                    alt="NFT Image"
+                    class="max-h-[250px] w-full object-cover"
+                />
+            </figure>
+            <div class="card-body">
+                <h2 class="card-title">${json.name}</h2>
+                <div class="flex flex-col gap-2 text-xl font-medium">
+                    <div class="flex items-center justify-between w-full">
+                        <p>ID:</p> <p class="text-lg font-normal text-end">${id}</p>
                     </div>
-                    <p>${
-                      json.description
-                        ? json.description
-                        : "Description not found"
-                    }</p>
+                    <div class="flex items-center justify-between w-full">
+                        <p>Owner:</p> <p class="text-lg font-normal text-end">${shortenAddress(
+                          ownerAddress
+                        )}</p>
+                    </div>
+                    <div class="flex items-center justify-between w-full">
+                        <p>Amount:</p> <p class="text-lg font-normal text-end">${amount}</p>
+                    </div>
                 </div>
+                <p>${json.description}</p>
             </div>
-          `;
+        </div>
+      `;
         } catch (err) {
-          customCallToast(`Failed to withdraw nft with id: ${id}`);
+          const json = {
+            name: "Name not defined",
+            description: "Description not found",
+            image:
+              "https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece",
+          };
+
+          section.innerHTML += `
+        <div class="card max-w-[320px] bg-base-100 shadow-xl">
+            <figure>
+                <img
+                    src="${json.image}"
+                    alt="NFT Image"
+                    class="max-h-[250px] w-full object-cover"
+                />
+            </figure>
+            <div class="card-body">
+                <h2 class="card-title">${json.name}</h2>
+                <div class="flex flex-col gap-2 text-xl font-medium">
+                    <div class="flex items-center justify-between w-full">
+                        <p>ID:</p> <p class="text-lg font-normal text-end">${id}</p>
+                    </div>
+                    <div class="flex items-center justify-between w-full">
+                        <p>Owner:</p> <p class="text-lg font-normal text-end">${shortenAddress(
+                          ownerAddress
+                        )}</p>
+                    </div>
+                    <div class="flex items-center justify-between w-full">
+                        <p>Amount:</p> <p class="text-lg font-normal text-end">${amount}</p>
+                    </div>
+                </div>
+                <p>${json.description}</p>
+            </div>
+        </div>
+      `;
+
+          //   customCallToast(`Failed to load NFT with ID: ${id}`);
         }
       }
     };
@@ -315,11 +370,11 @@
 
       setTimeout(() => {
         mySbtTab.click();
-      }, 1400);
+      }, 2400);
     });
 
     setTimeout(() => {
       connectToContract();
-    }, 1100);
+    }, 2200);
   </script>
 </body>

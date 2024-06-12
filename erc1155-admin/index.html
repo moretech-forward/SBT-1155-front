@@ -332,7 +332,8 @@
     const getAddress = async () => {
       setTimeout(() => {
         contractAddress = document.getElementById("future_address").innerHTML;
-      }, 2000);
+        console.log("Contract:", contractAddress);
+      }, 2100);
     };
 
     getAddress();
@@ -343,28 +344,27 @@
 
     const initApp = async () => {
       // forward
-      // provider = new ethers.BrowserProvider(this.parent.ethereum);
-      // signer = await provider.getSigner();
-
-      // connectContract = new ethers.Contract(contractAddress, abi, signer);
-      // console.log("Account:", await signer.getAddress());
+      provider = new ethers.BrowserProvider(this.parent.ethereum);
+      signer = await provider.getSigner();
+      connectContract = new ethers.Contract(contractAddress, abi, signer);
+      console.log("Account:", await signer.getAddress());
       // forward
 
       // test chain
-      const privateKey =
-        "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-      const provider = ethers.getDefaultProvider("http://localhost:8545/");
-      contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
-      const walletWithProvider = new ethers.Wallet(privateKey, provider);
-      const contract = new ethers.Contract(contractAddress, abi, provider);
-      connectContract = contract.connect(walletWithProvider);
+      // const privateKey =
+      //   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+      // const provider = ethers.getDefaultProvider("http://localhost:8545/");
+      // contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
+      // const walletWithProvider = new ethers.Wallet(privateKey, provider);
+      // const contract = new ethers.Contract(contractAddress, abi, provider);
+      // connectContract = contract.connect(walletWithProvider);
       // test chain
 
       getCollectionName();
     };
     setTimeout(() => {
       initApp();
-    }, 3000);
+    }, 2500);
 
     const getCollectionName = async () => {
       const collectionName = await connectContract.name();
@@ -380,10 +380,8 @@
   ></script>
   <script>
     const mintForm = document.getElementById("mint_form");
-    const batchMintForm = document.getElementById("batch_mint_form");
     const setUriForm = document.getElementById("set_uri_form");
     const burnForm = document.getElementById("burn_form");
-    const batchBurnForm = document.getElementById("batch_burn_form");
     const transferOwnershipForm = document.getElementById(
       "transfer_ownership_form"
     );
@@ -395,7 +393,6 @@
       const to = formData.get("t_ownership");
 
       if (!to) {
-        // ничего не ввел
         try {
           await connectContract.transferOwnership(
             "0x0000000000000000000000000000000000000000"
@@ -514,118 +511,6 @@
           console.log(e.reason);
           Toastify({
             text: `Error call burn! ${e.reason}`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
-        }
-      }
-    });
-
-    batchMintForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      let error = false;
-      const formData = new FormData(batchMintForm);
-      const to = formData.get("batch_mint_address");
-      const idsData = formData.get("batch_mint_ids");
-      const ids = idsData
-        .split("\n")
-        .map((ids) => ids.trim())
-        .filter((ids) => ids.trim() !== "");
-
-      const amountsData = formData.get("batch_mint_amounts");
-      const amounts = amountsData
-        .split("\n")
-        .map((amounts) => amounts.trim())
-        .filter((amounts) => amounts.trim() !== "");
-
-      if (!/^0x[a-fA-F0-9]{40}$/.test(to)) {
-        Toastify({
-          text: `Wrong address: ${to}`,
-          className: "error",
-          position: "right",
-          gravity: "top",
-        }).showToast();
-        error = true;
-      }
-
-      if (amounts.length != ids.length) {
-        Toastify({
-          text: `The number of ids and amounts did not match!`,
-          position: "right",
-          gravity: "top",
-        }).showToast();
-        error = true;
-      }
-
-      if (!error) {
-        try {
-          await connectContract.batchMint(to, ids, amounts);
-          batchMintForm.reset();
-          Toastify({
-            text: `Successfull batchMint!`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
-        } catch (e) {
-          console.log(e);
-          Toastify({
-            text: `Error call batchMint`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
-        }
-      }
-    });
-
-    batchBurnForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      let error = false;
-      const formData = new FormData(batchBurnForm);
-      const from = formData.get("batch_burn_address");
-      const idsData = formData.get("batch_burn_ids");
-      const ids = idsData
-        .split("\n")
-        .map((ids) => ids.trim())
-        .filter((ids) => ids.trim() !== "");
-
-      const amountsData = formData.get("batch_burn_amounts");
-      const amounts = amountsData
-        .split("\n")
-        .map((amounts) => amounts.trim())
-        .filter((amounts) => amounts.trim() !== "");
-
-      if (!/^0x[a-fA-F0-9]{40}$/.test(from)) {
-        Toastify({
-          text: `Wrong address: ${from}`,
-          className: "error",
-          position: "right",
-          gravity: "top",
-        }).showToast();
-        error = true;
-      }
-
-      if (amounts.length != ids.length) {
-        Toastify({
-          text: `The number of ids and amounts did not match!`,
-          position: "right",
-          gravity: "top",
-        }).showToast();
-        error = true;
-      }
-
-      if (!error) {
-        try {
-          await connectContract.batchBurn(from, ids, amounts);
-          batchBurnForm.reset();
-          Toastify({
-            text: `Successfull burn!`,
-            position: "right",
-            gravity: "top",
-          }).showToast();
-        } catch (e) {
-          console.log(e);
-          Toastify({
-            text: `Error call batchMint`,
             position: "right",
             gravity: "top",
           }).showToast();
