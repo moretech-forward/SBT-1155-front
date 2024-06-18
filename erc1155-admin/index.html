@@ -394,9 +394,10 @@
 
       if (!to) {
         try {
-          await connectContract.transferOwnership(
+          const tx = await connectContract.transferOwnership(
             "0x0000000000000000000000000000000000000000"
           );
+          await tx.wait();
           console.log(await connectContract.owner());
           Toastify({
             text: `Success renounce ownership!`,
@@ -423,7 +424,8 @@
         error = true;
         if (!error) {
           try {
-            await connectContract.transferOwnership(to);
+            const tx = await connectContract.transferOwnership(to);
+            await tx.wait();
             Toastify({
               text: `Success transferOwnership!`,
               position: "right",
@@ -462,7 +464,8 @@
       }
       if (!error) {
         try {
-          await connectContract.mint(to, id, amount);
+          const tx = await connectContract.mint(to, id, amount);
+          await tx.wait();
           mintForm.reset();
           Toastify({
             text: `Successfull mint!`,
@@ -500,7 +503,8 @@
 
       if (!error) {
         try {
-          await connectContract.burn(from, id, amount);
+          const tx = await connectContract.burn(from, id, amount);
+          await tx.wait();
           burnForm.reset();
           Toastify({
             text: `Successfull burn!`,
@@ -527,7 +531,8 @@
 
       if (!error) {
         try {
-          await connectContract.setURI(id, uri);
+          const tx = await connectContract.setURI(id, uri);
+          await tx.wait();
           setUriForm.reset();
           Toastify({
             text: `Successfull set uri!`,
