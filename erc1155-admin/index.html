@@ -403,7 +403,7 @@
             "0x0000000000000000000000000000000000000000"
           );
           await tx.wait();
-          console.log(await connectContract.owner());
+          console.log("old owner", await connectContract.owner());
           Toastify({
             text: `Success renounce ownership!`,
             position: "right",
@@ -425,8 +425,8 @@
             gravity: "top",
           }).showToast();
         }
-        console.log(await connectContract.owner());
-        error = true;
+        console.log("old owner", await connectContract.owner());
+        error = false;
         if (!error) {
           try {
             const tx = await connectContract.transferOwnership(to);
@@ -436,7 +436,7 @@
               position: "right",
               gravity: "top",
             }).showToast();
-            console.log(await connectContract.owner());
+            console.log("New Owner", await connectContract.owner());
             transferOwnershipForm.reset();
           } catch (e) {
             console.log(e);
