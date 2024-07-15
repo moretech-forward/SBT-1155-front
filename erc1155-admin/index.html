@@ -40,25 +40,73 @@
             id="form-output-myAddr-0"
         >address</span
         >
-        <br />
+        <br/>
       </div>
     </div>
-
-    <script>
-      const button = document.getElementById("read-btn");
-      if (button) {
-        setTimeout(() => {
-          button.click();
-        }, 1000);
-
-        setTimeout(() => {
-          console.log("Contract address: ", document.getElementById(
-            "form-output-myAddr-0"
-          ));
-        }, 2100);
-      }
-    </script>
   </form>
+
+  <script>
+    const btn = document.getElementById("read-btn")
+    if (btn) {
+      setTimeout(() => {
+        btn.click()
+      }, 1000)
+    }
+  </script>
+
+  <script>
+    const logStyle = 'color: green; font-weight: bold;';
+    const errorStyle = 'color: red; font-weight: bold;';
+
+    console.log('%cScript initialized', logStyle);
+
+    const checkForContractAddress = () => {
+      console.log('%cStarting to check for contract address', logStyle);
+
+      const checkAddress = () => {
+        console.log('Checking for contract address in the document');
+        const addressElement = document.getElementById("form-output-myAddr-0");
+        const address = addressElement ? addressElement.innerHTML : null;
+        const addressRegex = /^(0x)?[0-9a-fA-F]{40}$/;
+
+        if (address) {
+          console.log(`Found address: ${address}`);
+        } else {
+          console.log('Address not found');
+        }
+
+        if (address && addressRegex.test(address)) {
+          console.log(`%cAddress ${address} is valid`, logStyle);
+          contractAddress = address;
+          initApp();
+          console.log('%cCalled initApp...', logStyle);
+          return true;
+        } else {
+          console.log(`%cAddress: ${address} is invalid`, errorStyle);
+        }
+        return false;
+      };
+
+      console.log('Setting interval to check address every 250 ms');
+      const intervalId = setInterval(() => {
+        if (checkAddress()) {
+          clearInterval(intervalId);
+          clearTimeout(timeoutId);
+          console.log('%cAddress found and interval cleared', logStyle);
+        }
+      }, 250);
+
+      // Set timeout for 5 seconds to stop checking
+      const timeoutId = setTimeout(() => {
+        clearInterval(intervalId);
+        console.error('%cFailed to obtain contract address within the time limit', errorStyle);
+        customCallToast("Failed to obtain contract address within the time limit, reload page!")
+      }, 5000);
+    };
+
+    console.log('Setting timeout to start checking for address in 2 seconds');
+    setTimeout(checkForContractAddress, 2000);
+  </script>
 
   <section
     class="pt-20 items-center flex-col gap-10 bg-base-100 flex"
@@ -314,7 +362,6 @@
 
     const initApp = async () => {
       // forward
-      contractAddress = document.getElementById("form-output-myAddr-0").innerHTML
       provider = new ethers.BrowserProvider(this.parent.ethereum);
       signer = await provider.getSigner();
       connectContract = new ethers.Contract(contractAddress, abi, signer);
@@ -333,9 +380,6 @@
 
       getCollectionName();
     };
-    setTimeout(() => {
-      initApp();
-    }, 3000);
 
     const getCollectionName = async () => {
       const collectionName = await connectContract.name();
@@ -532,6 +576,14 @@
   </script>
 
   <script>
+    const customCallToast = (msg) => {
+      Toastify({
+        text: msg,
+        position: "center",
+        gravity: "top",
+      }).showToast();
+    };
+
     let spinner_html = `
   <span class="loading loading-spinner loading-lg bg-white"></span>
 `;
@@ -552,7 +604,7 @@
       if (loader) {
         loader.remove();
       } else {
-        showToast("Not found overlay in select element!", "warning");
+        customCallToast("Not found overlay in select element!");
       }
     }
   </script>
